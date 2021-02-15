@@ -1,14 +1,16 @@
 import puppeteer from 'puppeteer'
 
-import checkAvailability from './sites/cvs/browse.js'
+import siteCheckers from './sites/index.js'
 
 (async () => {
   console.log('🚦 Launching browser...')
   const browser = await puppeteer.launch({ headless: true })
 
   try {
-    const result = await checkAvailability(browser)
-    console.log('An appointment is available:', result)
+    for (const checkAvailability of siteCheckers) {
+      const result = await checkAvailability(browser)
+      console.log('An appointment is available:', result)
+    }
   } catch(err) {
     console.error('error:', err)
   }
