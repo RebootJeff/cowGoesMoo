@@ -6,18 +6,19 @@
 */
 const createPageEvaluator = (url, pageFunction) => {
   /*
-  * param {Puppeteer Browser} browser
+  * param {Puppeteer Page} page
   * returns {any}
   */
-  return async (browser) => {
-    const page = await browser.newPage()
+  return async (page) => {
     await page.goto(url)
 
     let result
     try {
       result = await page.evaluate(pageFunction)
+      console.log(result)
     } catch (err) {
       console.error('💥 page.evaluate error:', err)
+      process.exit() // TODO: remove this after debugging
     }
 
     return result

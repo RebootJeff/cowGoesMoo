@@ -1,14 +1,14 @@
-import puppeteer from 'puppeteer'
-
 import createPageEvaluator from '../../utils/createPageEvaluator.js'
 
 const URL = 'https://www.cvs.com/immunizations/covid-19-vaccine'
 
 /*
+ * Sends a GET request and parses the JSON response
  * returns Promise<Boolean> - appointment availability
 */
-const fetchData = async () => {
-  const FETCH_URL = 'https://www.cvs.com/immunizations/covid-19-vaccine.vaccine-status.MD.json?vaccineinfo'
+const checker = async () => {
+  const STATE = 'MD'
+  const FETCH_URL = `https://www.cvs.com/immunizations/covid-19-vaccine.vaccine-status.${STATE}.json?vaccineinfo`
   const FETCH_CONFIG = {
     'credentials': 'include',
     'headers': {
@@ -27,13 +27,13 @@ const fetchData = async () => {
   return await window.fetch(FETCH_URL, FETCH_CONFIG)
     .then(res => res.json())
     .then(json => {
-      const cities = json.responsePayloadData.data.MD
+      const cities = json.responsePayloadData.data[STATE]
       return cities.some(city => city.status !== 'Fully Booked')
     })
 }
 
 export default {
   name: 'CVS',
-  checker: createPageEvaluator(URL, fetchData),
+  checker: createPageEvaluator(URL, checker),
   url: URL,
 }
