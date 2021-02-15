@@ -10,6 +10,16 @@ const ZIP_CODE_INPUT_FIELD = '#inputLocation'
 const ZIP_CODE_INPUT_BUTTON = '.form__input button'
 const ALERT_PARAGRAPH = '.alert__red p'
 
+const checkForUnavailabilityBanner = async (page) => {
+  try {
+    const alertText = await page.$eval(ALERT_PARAGRAPH, el => el.innerText)
+    return alertText !== UNAVAILABLE_TEXT
+  } catch (err) {
+    // No banner found, so there is hope?
+    return true
+  }
+}
+
 /*
  * returns Promise<Boolean> - appointment availability
 */
@@ -27,8 +37,7 @@ const checker = async (page) => {
     await page.click(ZIP_CODE_INPUT_BUTTON)
     await page.waitForTimeout(WAIT_DURATION)
     
-    const alertText = await page.$eval(ALERT_PARAGRAPH, el => el.innerText)
-    return alertText !== UNAVAILABLE_TEXT
+    return await checkForUnavailabilityBanner(page)
   } catch (err) {
     console.error(`💥 ${NAME} checker error:`, err)
   }
