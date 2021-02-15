@@ -29,7 +29,7 @@ const checkAllSites = async (browser) => {
 
     await page.close()
     console.log(`⏳ Next round of checks will start in ${timeBetweenChecks} minutes.`)
-    return delay(checkAllSites, INTERVAL_MS, page) // here we go again
+    return delay(checkAllSites, INTERVAL_MS, browser) // here we go again
   } catch(err) {
     console.error('💥 error in checkAllSites:', err)
     process.exit()
