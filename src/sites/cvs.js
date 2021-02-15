@@ -1,10 +1,12 @@
 import puppeteer from 'puppeteer'
 
+const URL = 'https://www.cvs.com/immunizations/covid-19-vaccine'
+
 /*
  * returns Promise<Boolean> - appointment availability
 */
 const getCVSInfo = async () => {
-  const CVS_URL = 'https://www.cvs.com/immunizations/covid-19-vaccine.vaccine-status.MD.json?vaccineinfo'
+  const JSON_URL = 'https://www.cvs.com/immunizations/covid-19-vaccine.vaccine-status.MD.json?vaccineinfo'
   const CVS_CONFIG = {
     'credentials': 'include',
     'headers': {
@@ -20,7 +22,7 @@ const getCVSInfo = async () => {
   }
   
   // `window` reference means this must be run within context of Puppeteer page
-  return await window.fetch(CVS_URL, CVS_CONFIG)
+  return await window.fetch(JSON_URL, CVS_CONFIG)
     .then(res => res.json())
     .then(json => {
       const cities = json.responsePayloadData.data.MD
@@ -34,9 +36,7 @@ const getCVSInfo = async () => {
 */
 const checkAvailability = async (browser) => {
   const page = await browser.newPage()
-  
-  console.log('🕸 Checking CVS website...')
-  await page.goto('https://www.cvs.com/immunizations/covid-19-vaccine')
+  await page.goto(URL)
 
   let availability
   try {
@@ -48,4 +48,8 @@ const checkAvailability = async (browser) => {
   return availability
 }
 
-export default checkAvailability
+export default {
+  name: 'CVS',
+  checker: checkAvailability,
+  url: URL,
+}
