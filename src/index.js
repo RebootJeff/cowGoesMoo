@@ -21,7 +21,7 @@ const checkAllSites = async (browser) => {
 
       if (result) {
         notify(name, url)
-      } else {
+      } else if (result === false) { // `result` could be undefined if there was a problem fetching data
         console.log(`⛔ ${name} has no appointments open yet.`)
       }
     }
