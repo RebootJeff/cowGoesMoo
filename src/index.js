@@ -28,7 +28,7 @@ const checkAllSites = async (browser) => {
 
     return delay(checkAllSites, INTERVAL, browser) // here we go again
   } catch(err) {
-    console.error('error in checkAllSites:', err)
+    console.error('💥 error in checkAllSites:', err)
     process.exit()
   }
 }
