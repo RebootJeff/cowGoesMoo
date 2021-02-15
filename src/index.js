@@ -41,7 +41,6 @@ const checkAllSites = async (browser) => {
   console.log('🚦 Launching browser...')
   const browser = await puppeteer.launch({ headless: false }) // TODO: switch to headless after debugging
 
-  // TODO: This still seems slightly buggy on Windows
   if (process.platform === 'win32') {
     const rl = readline.createInterface({
       input: process.stdin,
@@ -50,6 +49,7 @@ const checkAllSites = async (browser) => {
     rl.on('SIGINT', () => process.emit('SIGINT'))
   }
 
+  // TODO: This still seems slightly buggy ("Bye bye!" message is never shown)
   process.on('exit', async () => {
     console.log('🏁 Closing browser...')
     await browser.close()
