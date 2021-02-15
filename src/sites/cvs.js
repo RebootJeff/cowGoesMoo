@@ -1,5 +1,6 @@
 import createPageEvaluator from '../../utils/createPageEvaluator.js'
 
+const NAME = 'CVS'
 const URL = 'https://www.cvs.com/immunizations/covid-19-vaccine'
 
 /*
@@ -33,7 +34,7 @@ const checker = async () => {
 }
 
 export default {
-  name: 'CVS',
-  checker: createPageEvaluator(URL, checker),
+  name: NAME,
+  checker: createPageEvaluator(URL, checker, NAME),
   url: URL,
 }

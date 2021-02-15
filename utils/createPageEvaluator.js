@@ -4,21 +4,19 @@
  * param {function} pageFunction
  * returns {function}
 */
-const createPageEvaluator = (url, pageFunction) => {
+const createPageEvaluator = (url, pageFunction, name) => {
   /*
   * param {Puppeteer Page} page
   * returns {any}
   */
   return async (page) => {
-    await page.goto(url)
-
     let result
+    
     try {
+      await page.goto(url)
       result = await page.evaluate(pageFunction)
-      console.log(result)
     } catch (err) {
-      console.error('💥 page.evaluate error:', err)
-      process.exit() // TODO: remove this after debugging
+      console.error(`💥 ${name} page evaluate error:`, err)
     }
 
     return result
