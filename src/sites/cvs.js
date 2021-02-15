@@ -1,13 +1,15 @@
 import puppeteer from 'puppeteer'
 
+import createPageEvaluator from '../../utils/createPageEvaluator.js'
+
 const URL = 'https://www.cvs.com/immunizations/covid-19-vaccine'
 
 /*
  * returns Promise<Boolean> - appointment availability
 */
-const getCVSInfo = async () => {
-  const JSON_URL = 'https://www.cvs.com/immunizations/covid-19-vaccine.vaccine-status.MD.json?vaccineinfo'
-  const CVS_CONFIG = {
+const fetchData = async () => {
+  const FETCH_URL = 'https://www.cvs.com/immunizations/covid-19-vaccine.vaccine-status.MD.json?vaccineinfo'
+  const FETCH_CONFIG = {
     'credentials': 'include',
     'headers': {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0',
@@ -22,7 +24,7 @@ const getCVSInfo = async () => {
   }
   
   // `window` reference means this must be run within context of Puppeteer page
-  return await window.fetch(JSON_URL, CVS_CONFIG)
+  return await window.fetch(FETCH_URL, FETCH_CONFIG)
     .then(res => res.json())
     .then(json => {
       const cities = json.responsePayloadData.data.MD
@@ -30,26 +32,8 @@ const getCVSInfo = async () => {
     })
 }
 
-/*
- * param {Puppeteer Browser} browser
- * returns Promise<Boolean> - appointment availability
-*/
-const checkAvailability = async (browser) => {
-  const page = await browser.newPage()
-  await page.goto(URL)
-
-  let availability
-  try {
-    availability = await page.evaluate(getCVSInfo)
-  } catch (err) {
-    console.error('page.evaluate error:', err)
-  }
-
-  return availability
-}
-
 export default {
   name: 'CVS',
-  checker: checkAvailability,
+  checker: createPageEvaluator(URL, fetchData),
   url: URL,
 }
