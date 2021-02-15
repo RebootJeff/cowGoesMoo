@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # config that can have sensitive data
-private.js
+privateConfig.js

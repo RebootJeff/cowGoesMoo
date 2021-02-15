@@ -1,4 +1,4 @@
-import { search } from '../../private.js'
+import { search } from '../../privateConfig.js'
 
 const URL = 'https://www.walgreens.com/findcare/vaccination/covid-19/location-screening'
 const WAIT_DURATION = 3 * 1000 // 3 seconds in milliseconds
