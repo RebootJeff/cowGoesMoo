@@ -11,10 +11,12 @@ const remindHowToExit = () => {
   console.log('You can exit by hitting CTRL+C ...but it may take a moment.')
 }
 
-const checkAllSites = async (page) => {
+const checkAllSites = async (browser) => {
   remindHowToExit()
   
   try {
+    const page = await browser.newPage()
+    
     for (const {name, checker, url} of sites) {
       console.log(`🔍 Checking ${name} website at ${new Date()}...`)
       const result = await checker(page)
@@ -26,6 +28,8 @@ const checkAllSites = async (page) => {
       }
     }
 
+    await page.close()
+    
     return delay(checkAllSites, INTERVAL, page) // here we go again
   } catch(err) {
     console.error('💥 error in checkAllSites:', err)
@@ -36,7 +40,6 @@ const checkAllSites = async (page) => {
 (async () => {
   console.log('🚦 Launching browser...')
   const browser = await puppeteer.launch({ headless: false })
-  const page = await browser.newPage()
 
   // TODO: This still seems slightly buggy on Windows
   if (process.platform === 'win32') {
@@ -53,5 +56,5 @@ const checkAllSites = async (page) => {
     console.log('👋 All done! Bye bye!')
   });
 
-  await checkAllSites(page)
+  await checkAllSites(browser)
 })();
