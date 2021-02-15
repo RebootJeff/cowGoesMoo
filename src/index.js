@@ -4,9 +4,9 @@ import readline from 'readline'
 import notify from './notify.js'
 import sites from './sites/index.js'
 import delay from '../utils/delay.js'
+import { timeBetweenChecks } from '../privateConfig.js'
 
-const INTERVAL_MIN = 5 // minutes
-const INTERVAL_MS = INTERVAL_MIN * 60 * 1000 // milliseconds
+const INTERVAL_MS = timeBetweenChecks * 60 * 1000 // milliseconds
 
 const checkAllSites = async (browser) => {
   console.log('ℹ You can exit by hitting CTRL+C ...but it may take a moment.')
@@ -28,7 +28,7 @@ const checkAllSites = async (browser) => {
     }
 
     await page.close()
-    console.log(`⏳ Next round of checks will start in ${INTERVAL_MIN} minutes.`)
+    console.log(`⏳ Next round of checks will start in ${timeBetweenChecks} minutes.`)
     return delay(checkAllSites, INTERVAL_MS, page) // here we go again
   } catch(err) {
     console.error('💥 error in checkAllSites:', err)

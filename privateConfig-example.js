@@ -12,3 +12,5 @@ export const search = {
   state: 'CA',
   zipCode: '90210',
 }
+
+export const timeBetweenChecks = 5 // minutes
