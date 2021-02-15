@@ -7,6 +7,13 @@ const URL = 'https://www.walgreens.com/findcare/vaccination/covid-19/location-sc
 */
 const fetchData = async () => {
   const FETCH_URL = 'https://www.walgreens.com/hcschedulersvc/svc/v1/immunizationLocations/availability'
+  
+  const now = new Date()
+  const month = now.getMonth() + 1 // due to zero-based indexing
+  const paddedMonth = `${(month < 10) ? '0' : ''}${month}`
+  const formattedDate = `${now.getFullYear()}-${paddedMonth}-${now.getDate()}` // YYYY-MM-DD
+  const body = `{\'serviceId\':\'99\',\'position\':{\'latitude\':39.2673283,\'longitude\':-76.7983067},\'appointmentAvailability\':{\'startDateTime\':${formattedDate}},\'radius\':25}`
+  
   const FETCH_CONFIG = {
     'credentials': 'include',
     'headers': {
@@ -16,7 +23,7 @@ const fetchData = async () => {
         'Content-Type': 'application/json; charset=utf-8'
     },
     'referrer': 'https://www.walgreens.com/findcare/vaccination/covid-19/location-screening',
-    'body': '{\'serviceId\':\'99\',\'position\':{\'latitude\':39.2673283,\'longitude\':-76.7983067},\'appointmentAvailability\':{\'startDateTime\':\'2021-02-15\'},\'radius\':25}',
+    'body': body,
     'method': 'POST',
     'mode': 'cors'
   }
@@ -25,7 +32,7 @@ const fetchData = async () => {
   return await window.fetch(FETCH_URL, FETCH_CONFIG)
     .then(res => res.json())
     .then(json => {
-      // TODO
+      return json.appointmentsAvailable
     })
 }
 
