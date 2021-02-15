@@ -7,6 +7,7 @@ This software will scan for COVID vaccine appointments at supported pharmacies. 
 - Pharmacies like CVS and Walgreens don't have a wait list or queue system for the COVID vaccine. I don't want my mom to have to deal with constantly refreshing the pharmacy websites to check for open appointments.
 - I plan on running this app on my local machine. If it finds an open vaccination appointment, it will send a notification email.
 - As you can imagine, the pharmacies don't provide open APIs to query for appointment availability status. So this app relies on web crawling rather than direct API calls.
+- Technically, instead of looking for open appointments, the app looks for a lack of open appointments. I've never seen appointment availability, so I can't program the app to recognize availability. If it can't find a total lack of appointments, then yay!
 
 ## Getting Started
 
