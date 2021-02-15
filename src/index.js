@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer'
 import readline from 'readline'
 
+import notify from './notify.js'
 import sites from './sites/index.js'
 import delay from '../utils/delay.js'
 
@@ -19,8 +20,7 @@ const checkAllSites = async (browser) => {
       const result = await checker(browser)
 
       if (result) {
-        console.log(`✅ OMG ${name} has an appointment available!`)
-        console.log(`Visit 👉 ${url} 👈 ASAP!`)
+        notify(name, url)
       } else {
         console.log(`⛔ ${name} has no appointments open yet.`)
       }
