@@ -5,41 +5,41 @@ import notify from './notify.js'
 import sites from './sites/index.js'
 import delay from '../utils/delay.js'
 
-const INTERVAL = 3 * 60 * 1000 // 3 minutes in milliseconds
-
-const remindHowToExit = () => {
-  console.log('You can exit by hitting CTRL+C ...but it may take a moment.')
-}
+const INTERVAL_MIN = 5 // minutes
+const INTERVAL_MS = INTERVAL_MIN * 60 * 1000 // milliseconds
 
 const checkAllSites = async (browser) => {
-  remindHowToExit()
+  console.log('ℹ You can exit by hitting CTRL+C ...but it may take a moment.')
   
   try {
     const page = await browser.newPage()
     
     for (const {name, checker, url} of sites) {
-      console.log(`🔍 Checking ${name} website at ${new Date()}...`)
+      console.log(`🔍 Checking ${name}\n   at ${new Date()}...`)
       const result = await checker(page)
 
-      if (result) {
+      if (result === true) {
         notify(name, url)
-      } else if (result === false) { // `result` could be undefined if there was a problem fetching data
+      } else if (result === false) {
         console.log(`⛔ ${name} has no appointments open yet.`)
+      } else {
+        console.log(`❓ ${name} appointment availability is unknown 🤔.`)
       }
     }
 
     await page.close()
-    
-    return delay(checkAllSites, INTERVAL, page) // here we go again
+    console.log(`⏳ Next round of checks will start in ${INTERVAL_MIN} minutes.`)
+    return delay(checkAllSites, INTERVAL_MS, page) // here we go again
   } catch(err) {
     console.error('💥 error in checkAllSites:', err)
     process.exit()
   }
 }
 
+// Here's where the app begins 🚀
 (async () => {
   console.log('🚦 Launching browser...')
-  const browser = await puppeteer.launch({ headless: false })
+  const browser = await puppeteer.launch({ headless: false }) // TODO: switch to headless after debugging
 
   // TODO: This still seems slightly buggy on Windows
   if (process.platform === 'win32') {

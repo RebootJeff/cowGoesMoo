@@ -1,6 +1,11 @@
 export const email = {
-  address: 'you@gmail.com',
-  password: 'MostDefTheBestestPWEverMade!',
+  from: {
+    address: 'you@gmail.com',
+    password: 'MostDefTheBestestPWEverMade!',
+  },
+  to: {
+    address: 'yourBelovedLudite@gmail.com',
+  },
 }
 
 export const search = {
