@@ -1,5 +1,5 @@
 const NAME = 'Fake Pharmacy for Debugging'
-const URL = 'www.example.com'
+const URL = 'https://www.example.com'
 
 /*
  * returns Promise<Boolean> - appointment availability
