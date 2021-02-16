@@ -36,7 +36,7 @@ const checker = async (page) => {
 
     // clear the pre-populated input by deleting 5 characters
     for (const _ of [1, 2, 3, 4, 5]) {
-      await page.waitForTimeout(500)
+      await page.waitForTimeout(200)
       await zipCodeInputField.press('Backspace')
     }
     

@@ -31,3 +31,9 @@ export const SEARCH = Object.freeze({
 })
 
 export const LOOP_INTERVAL = 5 // minutes
+
+export const HIDE_BROWSER = true
+export const BROWSER_SIZE = Object.freeze({
+  height: 768,
+  width: 1024,
+})
