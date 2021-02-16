@@ -2,7 +2,7 @@ import { SEARCH } from '../../privateConfig.js'
 
 const NAME = 'Walgreens'
 const URL = 'https://www.walgreens.com/findcare/vaccination/covid-19/location-screening'
-const WAIT_DURATION = 3 * 1000 // 3 seconds in milliseconds
+const WAIT_DURATION = 5 * 1000 // 3 seconds in milliseconds
 const UNAVAILABLE_TEXT = 'Appointments unavailable'
 
 // Selectors
@@ -36,7 +36,7 @@ const checker = async (page) => {
 
     // clear the pre-populated input by deleting 5 characters
     for (const _ of [1, 2, 3, 4, 5]) {
-      await page.waitForTimeout(100)
+      await page.waitForTimeout(500)
       await $zipCodeInputField.press('Backspace')
     }
     
