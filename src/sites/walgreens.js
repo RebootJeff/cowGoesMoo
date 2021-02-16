@@ -1,4 +1,4 @@
-import { search } from '../../privateConfig.js'
+import { SEARCH } from '../../privateConfig.js'
 
 const NAME = 'Walgreens'
 const URL = 'https://www.walgreens.com/findcare/vaccination/covid-19/location-screening'
@@ -40,7 +40,7 @@ const checker = async (page) => {
       await $zipCodeInputField.press('Backspace')
     }
     
-    await $zipCodeInputField.type(search.zipCode)
+    await $zipCodeInputField.type(SEARCH.zipCode)
     await page.click(ZIP_CODE_INPUT_BUTTON)
     await page.waitForTimeout(WAIT_DURATION)
     

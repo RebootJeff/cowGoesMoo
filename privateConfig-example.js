@@ -1,3 +1,9 @@
+// Enable/disable certain types of notifications
+export const ENABLE_NOTIFICATION = Object.freeze({
+  desktop: true,
+  emailAndSMS: true,
+})
+
 export const SENDER = Object.freeze({
   address: 'you@gmail.com',
   name: 'Jeff',
@@ -19,9 +25,9 @@ export const RECIPIENTS = Object.freeze([
   }),
 ])
 
-export const search = Object.freeze({
+export const SEARCH = Object.freeze({
   state: 'CA',
   zipCode: '90210',
 })
 
-export const timeBetweenChecks = 5 // minutes
+export const LOOP_INTERVAL = 5 // minutes
