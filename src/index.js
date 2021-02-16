@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer'
 import readline from 'readline'
 
-import notify from './notify.js'
+import notify from './notification/index.js'
 import sites from './sites/index.js'
 import delay from '../utils/delay.js'
 import { timeBetweenChecks } from '../privateConfig.js'
@@ -19,7 +19,7 @@ const checkAllSites = async (browser) => {
       const result = await checker(page)
 
       if (result === true) {
-        notify(name, url)
+        notify(name, url) // we're not going to `await`, just move on
       } else if (result === false) {
         console.log(`⛔ ${name} has no appointments open yet.`)
       } else {

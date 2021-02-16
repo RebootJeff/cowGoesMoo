@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 
-import { SENDER, RECIPIENTS } from '../privateConfig.js'
+import { SENDER, RECIPIENTS } from '../../privateConfig.js'
 
 /*
  * Checks that the config file contains all the necessary email fields.
@@ -48,9 +48,6 @@ const sendMessage = async (transporter, recipient, pharmacy, url) => {
  * returns Promise<void> - resolution value is not meant to be used
 */
 const notify = async (pharmacy, url) => {
-  console.log(`✅ OMG ${pharmacy} has an appointment available!`)
-  console.log(`Visit 👉 ${url} 👈 ASAP!`)
-
   if (validateConfig() === false) {
     return console.log('🙊 Email notification cannot be sent!')
   }
