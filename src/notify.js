@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 
-import { emailFrom, emailTo } from '../privateConfig.js'
+import { SENDER, RECIPIENTS } from '../privateConfig.js'
 
 /*
  * Checks that the config file contains all the necessary email fields.
@@ -8,11 +8,12 @@ import { emailFrom, emailTo } from '../privateConfig.js'
 */
 const validateConfig = () => {
   try {
-    return emailFrom.address &&
-      emailFrom.name &&
-      emailFrom.password &&
-      emailTo.address &&
-      emailTo.name
+    return SENDER.address &&
+      SENDER.name &&
+      SENDER.password &&
+      SENDER.service &&
+      RECIPIENTS[0].address &&
+      RECIPIENTS[0].name
   } catch (err) {
     console.error('💥 privateConfig.js is missing email info:', err)
     return false
@@ -20,7 +21,28 @@ const validateConfig = () => {
 }
 
 /*
- * Sends notification email via Gmail.
+ * Sends notification to an individual.
+ * param {Nodemailer Transporter} transporter
+ * param {Object} recipient
+ * param {String} pharmacy
+ * param {String} url
+ * returns Promise<void> - resolution value is not meant to be used
+*/
+const sendMessage = async (transporter, recipient, pharmacy, url) => {
+  console.log(`📧 Sending email to ${recipient.address}...`)
+      
+  await transporter.sendMail({
+    from: SENDER.address,
+    to: recipient.address,
+    subject: `💉 ${pharmacy} has a COVID vaccine appointment available!`,
+    text: `Hi ${recipient.name} - Visit ${url} ASAP!`
+  })
+
+  console.log(`👍 Email sent to ${recipient.name}.`)
+}
+
+/*
+ * Sends notifications to all recipients.
  * param {String} pharmacy
  * param {String} url
  * returns Promise<void> - resolution value is not meant to be used
@@ -34,25 +56,17 @@ const notify = async (pharmacy, url) => {
   }
 
   const transporter = nodemailer.createTransport({
-    // TODO: Consider switching off of Gmail - https://nodemailer.com/usage/using-gmail/
     service: 'Hotmail',
     auth: {
-      user: emailFrom.address,
-      pass: emailFrom.password,
+      user: SENDER.address,
+      pass: SENDER.password,
     },
   })
 
   try {
-    console.log(`📧 Sending email to ${emailTo.address}...`)
-
-    await transporter.sendMail({
-      from: emailFrom.address,
-      to: [emailTo.address, '4432859770@vtext.com'],
-      subject: `💉 ${pharmacy} has a COVID vaccine appointment available!`,
-      text: `Hi ${emailTo.name} - Visit ${url} ASAP!`
-    })
-
-    console.log(`👍 Email sent to ${emailTo.name}.`)
+    for(const recipient of RECIPIENTS) {
+      await sendMessage(transporter, recipient, pharmacy, url)
+    }
   } catch (err) {
     console.error(`💥 Failed to send email for ${pharmacy}:`, err)
   }
