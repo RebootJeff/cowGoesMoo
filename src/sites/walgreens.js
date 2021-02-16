@@ -32,15 +32,15 @@ const checkForUnavailabilityBanner = async (page) => {
 const checker = async (page) => {
   try {
     await page.goto(URL)
-    const $zipCodeInputField = await page.$(ZIP_CODE_INPUT_FIELD)
+    const zipCodeInputField = await page.$(ZIP_CODE_INPUT_FIELD)
 
     // clear the pre-populated input by deleting 5 characters
     for (const _ of [1, 2, 3, 4, 5]) {
       await page.waitForTimeout(500)
-      await $zipCodeInputField.press('Backspace')
+      await zipCodeInputField.press('Backspace')
     }
     
-    await $zipCodeInputField.type(SEARCH.zipCode)
+    await zipCodeInputField.type(SEARCH.zipCode)
     await page.click(ZIP_CODE_INPUT_BUTTON)
     await page.waitForTimeout(WAIT_DURATION)
     

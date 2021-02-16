@@ -14,7 +14,7 @@ const notify = async (pharmacy, url) => {
   console.log(`✅ OMG ${pharmacy} has an appointment available!`)
   console.log(`\nVisit 👉 ${url} 👈 ASAP!\n`)
 
-  await Promise.all([
+  return await Promise.all([
     desktop && sendDesktopAlert(pharmacy, url),
     emailAndSMS && sendEmailAndSMS(pharmacy, url),
   ])

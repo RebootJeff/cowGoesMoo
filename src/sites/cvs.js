@@ -3,6 +3,7 @@ import createPageEvaluator from '../../utils/createPageEvaluator.js'
 const NAME = 'CVS'
 const URL = 'https://www.cvs.com/immunizations/covid-19-vaccine'
 
+// TODO: Consider replacing fetch-based approach with automated browsing (like the Walgreens checker)
 /*
  * Sends a GET request and parses the JSON response
  * returns Promise<Boolean> - appointment availability

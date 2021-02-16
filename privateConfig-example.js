@@ -1,12 +1,12 @@
 // Enable/disable certain types of notifications
 export const ENABLE_NOTIFICATION = Object.freeze({
   desktop: true,
-  emailAndSMS: true,
+  emailAndSMS: false,
 })
 
 export const SENDER = Object.freeze({
   address: 'you@gmail.com',
-  name: 'Jeff',
+  name: 'You',
   password: 'bestPasswordEverObviously',
   service: 'Gmail', // Supported services: https://github.com/nodemailer/nodemailer/blob/master/lib/well-known/services.json
   // If you want to use Gmail, you may need to change some Gmail Account settings: https://nodemailer.com/usage/using-gmail/
