@@ -1,5 +1,8 @@
 import sendDesktopAlert from './desktop.js'
 import sendEmailAndSMS from './email.js'
+import { ENABLE_NOTIFICATION } from '../../privateConfig.js'
+
+const { desktop, emailAndSMS } = ENABLE_NOTIFICATION
 
 /*
  * Sends notifications to all recipients.
@@ -9,11 +12,11 @@ import sendEmailAndSMS from './email.js'
 */
 const notify = async (pharmacy, url) => {
   console.log(`✅ OMG ${pharmacy} has an appointment available!`)
-  console.log(`Visit 👉 ${url} 👈 ASAP!`)
+  console.log(`\nVisit 👉 ${url} 👈 ASAP!\n`)
 
   await Promise.all([
-    sendDesktopAlert(pharmacy, url),
-    sendEmailAndSMS(pharmacy, url),
+    desktop && sendDesktopAlert(pharmacy, url),
+    emailAndSMS && sendEmailAndSMS(pharmacy, url),
   ])
 }
 
