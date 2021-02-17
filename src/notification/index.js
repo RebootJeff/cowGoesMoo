@@ -1,5 +1,5 @@
 import sendDesktopAlert from './desktop.js'
-import sendEmailAndSMS from './email/index.js'
+import sendEmailAndSMS from './emailAndSMS/index.js'
 import { ENABLE_NOTIFICATION } from '../../privateConfig.js'
 
 const { desktop, emailAndSMS } = ENABLE_NOTIFICATION

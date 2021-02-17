@@ -10,18 +10,19 @@ const getHtml = (recipientName, senderName, url) => '<p style="font-size: large;
   '</p>' +
   EMAIL_SIGNATURE
 
-const getText = (recipientName, senderName, url) =>
-  `Hey ${recipientName}, this is ${senderName}. Visit ${url}` +
-  'because it might have open COVID vaccine appointments! 🤞' +
-  '(BTW, I used CowGoesMoo to generate this notification)'
+// SMS message length is limited ~160 characters. Some URLs can be very long,
+// so we should keep the message as short as possible to leave space for the URL.
+const getText = (senderName, url) =>
+  `Visit ${url} for COVID vaccine apptmnts. Check w/${senderName} if u think this is spam`
 
 /*
- * param {Object} recipient
  * param {Object} sender
+ * param {Object} recipient
+ * param {String} pharmacy
  * param {String} url
  * returns {Object} - text/html key-value pair
 */
-const getMessageField = (recipient, sender, url) => {
+const getMessageFields = (sender, recipient, pharmacy, url) => {
   const phoneNumberString = recipient.address.split('@')[0]
   if (
     (
@@ -30,10 +31,13 @@ const getMessageField = (recipient, sender, url) => {
     ) &&
     isNaN(Number(phoneNumberString)) === false
   ) {
-    return { text: getText(recipient.name, sender.name, url) }
+    return { text: getText(sender.name, url) }
   }
 
-  return { html: getHtml(recipient.name, sender.name, url) }
+  return {
+    subject: `💉 ${pharmacy} has a COVID vaccine appointment available!`,
+    html: getHtml(recipient.name, sender.name, url),
+  }
 }
 
-export default getMessageField
+export default getMessageFields

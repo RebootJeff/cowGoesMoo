@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 
-import getMessageField from './message.js'
+import getMessageFields from './message.js'
 import validateConfig from './validateConfig.js'
 import { SENDER, RECIPIENTS } from '../../../privateConfig.js'
 
@@ -14,19 +14,18 @@ import { SENDER, RECIPIENTS } from '../../../privateConfig.js'
 */
 const sendMessage = async (transporter, recipient, pharmacy, url) => {
   if (validateConfig(SENDER, recipient) === false) {
-    return console.log('🙊 Email notification cannot be sent!')
+    return console.log('🙊 Email/SMS notification cannot be sent!')
   }
 
-  console.log(`📧 Sending email to ${recipient.address}...`)
+  console.log(`📧 Sending email/SMS to ${recipient.address}...`)
 
   await transporter.sendMail({
     from: SENDER.address,
     to: recipient.address,
-    subject: `💉 ${pharmacy} has a COVID vaccine appointment available!`,
-    ...(getMessageField(recipient, SENDER, url))
+    ...(getMessageFields(SENDER, recipient, pharmacy, url))
   })
 
-  console.log(`👍 Email sent to ${recipient.name}.`)
+  console.log(`👍 Email/SMS sent to ${recipient.name}.`)
 }
 
 /*
@@ -48,12 +47,12 @@ const notify = async (pharmacy, url) => {
     },
   })
 
-  try {
-    for(const recipient of RECIPIENTS) {
+  for(const recipient of RECIPIENTS) {
+    try {
       await sendMessage(transporter, recipient, pharmacy, url)
+    } catch (err) {
+      console.error(`💥 Failed to send email/SMS about ${pharmacy} to ${recipient}:`, err)
     }
-  } catch (err) {
-    console.error(`💥 Failed to send email for ${pharmacy}:`, err)
   }
 }
 
