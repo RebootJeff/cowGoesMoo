@@ -53,7 +53,7 @@ const notify = async (pharmacy, url) => {
   }
 
   const transporter = nodemailer.createTransport({
-    service: 'Hotmail',
+    service: SENDER.service,
     auth: {
       user: SENDER.address,
       pass: SENDER.password,
