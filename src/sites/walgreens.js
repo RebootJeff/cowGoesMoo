@@ -2,7 +2,6 @@ import { SEARCH } from '../../privateConfig.js'
 
 const NAME = 'Walgreens'
 const URL = 'https://www.walgreens.com/findcare/vaccination/covid-19/location-screening'
-const WAIT_DURATION = 5 * 1000 // 3 seconds in milliseconds
 const UNAVAILABLE_TEXT = 'Appointments unavailable'
 
 // Selectors
@@ -27,28 +26,25 @@ const checkForUnavailabilityBanner = async (page) => {
 }
 
 /*
+ * param {Puppeteer Page} page
  * returns Promise<Boolean> - appointment availability
 */
 const checker = async (page) => {
-  try {
-    await page.goto(URL)
-    const zipCodeInputField = await page.$(ZIP_CODE_INPUT_FIELD)
+  await page.goto(URL)
+  const zipCodeInputField = await page.$(ZIP_CODE_INPUT_FIELD)
 
-    // clear the pre-populated input by deleting 5 characters
-    for (const _ of [1, 2, 3, 4, 5]) {
-      await zipCodeInputField.press('Backspace')
-      await page.waitForTimeout(200)
-    }
-    
-    await zipCodeInputField.type(SEARCH.zipCode)
-    await page.click(ZIP_CODE_INPUT_BUTTON)
-    await page.waitForTimeout(WAIT_DURATION)
-    
-    return await checkForUnavailabilityBanner(page)
-  } catch (err) {
-    console.error(`💥 ${NAME} checker error:`, err)
+  // clear the pre-populated input by deleting 6 characters
+  for (const _ of [1, 2, 3, 4, 5, 6]) {
+    await zipCodeInputField.press('Backspace')
+    await page.waitForTimeout(250)
   }
   
+  await zipCodeInputField.type(SEARCH.zipCode)
+  await page.waitForTimeout(500)
+  await page.click(ZIP_CODE_INPUT_BUTTON)
+  await page.waitForTimeout(4000)
+  
+  return await checkForUnavailabilityBanner(page)
 }
 
 export default {
