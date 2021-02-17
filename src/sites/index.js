@@ -1,11 +1,11 @@
 import cvs from './cvs.js'
-import walgreens from './walgreens.js'
 // import debugSite from './debugSite.js'
+import walgreens from './walgreens.js'
 
 const siteCheckers = [
+  // debugSite,
   cvs,
   walgreens,
-  // debugSite,
 ]
 
 export default siteCheckers

@@ -30,12 +30,12 @@ const validateConfig = () => {
 */
 const sendMessage = async (transporter, recipient, pharmacy, url) => {
   console.log(`📧 Sending email to ${recipient.address}...`)
-      
+
   await transporter.sendMail({
     from: SENDER.address,
     to: recipient.address,
     subject: `💉 ${pharmacy} has a COVID vaccine appointment available!`,
-    text: `Hi ${recipient.name} - Visit ${url} ASAP!`
+    text: `${recipient.name}, visit ${url} ASAP! Let me know how it goes 🤞\n--${SENDER.name}`
   })
 
   console.log(`👍 Email sent to ${recipient.name}.`)
