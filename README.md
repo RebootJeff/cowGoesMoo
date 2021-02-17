@@ -27,6 +27,6 @@ By default, the program will only show desktop notifications and print helpful l
 - The [streetmerchant](https://github.com/jef/streetmerchant) repo is a stellar reference!
 - Certain comments are added to help those who might be learning to code by reading my source code.
 - Key open-source tools used:
--- *Google Puppeteer* for headless browsing.
--- *Nodemailer* for emailing notifications.
--- *node-notifier* for desktop notifications.
+  - *Google Puppeteer* for headless browsing.
+  - *Nodemailer* for emailing notifications.
+  - *node-notifier* for desktop notifications.
