@@ -30,5 +30,5 @@ By default, the program will only show desktop notifications and print helpful l
 - Certain comments are added to help those who might be learning to code by reading my source code.
 - Key open-source tools used:
   - *Google Puppeteer* for headless browsing.
-  - *Nodemailer* for emailing notifications.
+  - *Nodemailer* for email & SMS notifications.
   - *node-notifier* for desktop notifications.
