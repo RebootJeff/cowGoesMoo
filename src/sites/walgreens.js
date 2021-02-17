@@ -1,5 +1,3 @@
-import { SEARCH } from '../../privateConfig.js'
-
 const NAME = 'Walgreens'
 const URL = 'https://www.walgreens.com/findcare/vaccination/covid-19/location-screening'
 const UNAVAILABLE_TEXT = 'Appointments unavailable'
@@ -27,9 +25,10 @@ const checkForUnavailabilityBanner = async (page) => {
 
 /*
  * param {Puppeteer Page} page
+ * param {Object} search config with zipCode
  * returns Promise<Boolean> - appointment availability
 */
-const checker = async (page) => {
+const checker = async (page, { zipCode }) => {
   await page.goto(URL)
   const zipCodeInputField = await page.$(ZIP_CODE_INPUT_FIELD)
 
@@ -39,7 +38,7 @@ const checker = async (page) => {
     await page.waitForTimeout(250)
   }
   
-  await zipCodeInputField.type(SEARCH.zipCode)
+  await zipCodeInputField.type(zipCode)
   await page.waitForTimeout(500)
   await page.click(ZIP_CODE_INPUT_BUTTON)
   await page.waitForTimeout(4000)
