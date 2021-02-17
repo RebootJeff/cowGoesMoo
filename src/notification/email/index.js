@@ -1,24 +1,8 @@
 import nodemailer from 'nodemailer'
 
-import { SENDER, RECIPIENTS } from '../../privateConfig.js'
-
-/*
- * Checks that the config file contains all the necessary email fields.
- * returns Boolean
-*/
-const validateConfig = () => {
-  try {
-    return SENDER.address &&
-      SENDER.name &&
-      SENDER.password &&
-      SENDER.service &&
-      RECIPIENTS[0].address &&
-      RECIPIENTS[0].name
-  } catch (err) {
-    console.error('💥 privateConfig.js is missing email info:', err)
-    return false
-  }
-}
+import getMessageField from './message.js'
+import validateConfig from './validateConfig.js'
+import { SENDER, RECIPIENTS } from '../../../privateConfig.js'
 
 /*
  * Sends notification to an individual.
@@ -29,13 +13,17 @@ const validateConfig = () => {
  * returns Promise<void> - resolution value is not meant to be used
 */
 const sendMessage = async (transporter, recipient, pharmacy, url) => {
+  if (validateConfig(SENDER, recipient) === false) {
+    return console.log('🙊 Email notification cannot be sent!')
+  }
+
   console.log(`📧 Sending email to ${recipient.address}...`)
 
   await transporter.sendMail({
     from: SENDER.address,
     to: recipient.address,
     subject: `💉 ${pharmacy} has a COVID vaccine appointment available!`,
-    text: `${recipient.name}, visit ${url} ASAP! Let me know how it goes 🤞\n--${SENDER.name}`
+    ...(getMessageField(recipient, SENDER, url))
   })
 
   console.log(`👍 Email sent to ${recipient.name}.`)
@@ -48,8 +36,8 @@ const sendMessage = async (transporter, recipient, pharmacy, url) => {
  * returns Promise<void> - resolution value is not meant to be used
 */
 const notify = async (pharmacy, url) => {
-  if (validateConfig() === false) {
-    return console.log('🙊 Email notification cannot be sent!')
+  if (Array.isArray(RECIPIENTS) === false) {
+    console.log('🤷‍♂️ There are no recipients configured.')
   }
 
   const transporter = nodemailer.createTransport({

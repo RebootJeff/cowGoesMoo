@@ -2,6 +2,8 @@
 
 This software will scan for COVID vaccine appointments at supported pharmacies. The current list of supported pharmacies is [here](https://github.com/RebootJeff/cowGoesMoo/blob/main/src/sites/index.js#L4). Upon finding a potential open appointment, the app will notify you via desktop notification, email, and/or SMS (depending on how you've configured it).
 
+Sadly, this initial version of the app only supports usage in USA. Specifically, SMS notifications and location configuration are both designed for USA users.
+
 ## Context
 
 - Pharmacies like CVS and Walgreens don't have a wait list or queue system for the COVID vaccine. I don't want my mom to have to deal with constantly refreshing the pharmacy websites to check for open appointments.
