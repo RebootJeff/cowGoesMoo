@@ -13,7 +13,7 @@ export default (sender, recipient) => {
       recipient.address &&
       recipient.name
   } catch (err) {
-    console.error('💥 privateConfig.js is missing email info:', err)
+    console.error('💥 privateConfig.js is missing sender or recipient info:', err)
     return false
   }
 }
