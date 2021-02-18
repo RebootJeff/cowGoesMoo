@@ -26,6 +26,7 @@ By default, the program will only show desktop notifications and print helpful l
 
 ## Development Info
 
+- CowGoesMoo has been tested on Windows 10 and MacOS.
 - The [streetmerchant](https://github.com/jef/streetmerchant) repo is a stellar reference!
 - Certain comments are added to help those who might be learning to code by reading my source code.
 - Key open-source tools used:
