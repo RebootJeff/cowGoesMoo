@@ -4,6 +4,9 @@ This software will scan for COVID vaccine appointments at supported pharmacies. 
 
 Sadly, this initial version of the app only supports usage in USA. Specifically, SMS notifications and location configuration are both designed for USA users.
 
+If you'd like to see what the app is doing, then configure it to show its browser window. Then you'll see something like this:
+![demonstration](https://user-images.githubusercontent.com/4919808/108439222-b1e65f80-7205-11eb-9e62-bfbc8c196156.gif)
+
 ## Getting Started
 
 In this initial version, the app must run locally.
