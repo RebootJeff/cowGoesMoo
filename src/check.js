@@ -23,35 +23,42 @@ const runCheckerSafely = async (name, checker, page, searchConfig) => {
 }
 
 /*
+ * Run checkers for all sites and send notifications for positive results
  * param {Puppeteer Page} page
  * returns Promise<void> - resolution value not meant to be used
 */
-const checkAllSites = async (page) => {
-  console.log('ℹ You can exit by hitting CTRL+C ...but it may take a moment.')
-  
-  try {
-    for (const {name, checker, url} of sites) {
-      console.log(`🔍 Checking ${name}\n   at ${new Date()}...`)
-      const result = await runCheckerSafely(name, checker, page, SEARCH)
+const checkAllSites = async (page) => {  
+  for (const {name, checker, url} of sites) {
+    console.log(`🔍 Checking ${name}\n   at ${new Date()}...`)
+    const result = await runCheckerSafely(name, checker, page, SEARCH)
 
-      if (result === true) {
-        notify(name, url) // we're not going to `await`, just move on
-      } else if (result === false) {
-        console.log(`⛔ ${name} has no appointments open yet.`)
-      } else {
-        console.log(`❓ ${name} appointment availability is unknown 🤔.`)
-      }
-
-      const pauseDuration = Math.round(INTERVAL_MS / sites.length)
-      console.log(`⏳ Next site will be checked in ~${Math.round(pauseDuration / 1000)} seconds.`)
-      await page.waitForTimeout(pauseDuration)
+    if (result === true) {
+      notify(name, url) // we're not going to `await`, we're going to multi-task
+    } else if (result === false) {
+      console.log(`⛔ ${name} has no appointments open yet.`)
+    } else {
+      console.log(`❓ ${name} appointment availability is unknown 🤔.`)
     }
-
-    return checkAllSites(page) // here we go again
-  } catch(err) {
-    console.error('💥 error in checkAllSites:', err)
-    process.exit()
   }
 }
 
-export default checkAllSites
+/*
+ * Continuously check sites based on config's interval
+ * param {Puppeteer Browser} browser
+ * returns Promise<void> - resolution value not meant to be used
+*/
+const startChecking = async (browser) => {
+  const page = await browser.newPage()
+
+  while (true) {
+    console.log('ℹ You can exit by hitting CTRL+C ...but it may take a minute to fully exit.')
+
+    await checkAllSites(page)
+    
+    const pauseDuration = Math.round(INTERVAL_MS / sites.length)
+    console.log(`⏳ Sites will be checked again in ~${Math.round(pauseDuration / 1000)} seconds.`)
+    await page.waitForTimeout(pauseDuration)
+  }
+}
+
+export default startChecking
