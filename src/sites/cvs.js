@@ -1,4 +1,5 @@
 import logger from '../utils/logger.js'
+import { getInnerTexts } from '../utils/page.js'
 
 const NAME = 'CVS'
 const URL = 'https://www.cvs.com/immunizations/covid-19-vaccine'
@@ -19,8 +20,8 @@ const checker = async (page, { state }) => {
   await page.click(stateLink)
 
   try {
-    return getInnerTexts(page, STATUS_SPANS)
-      .some(t => t === AVAILABLE_STATUS)
+    const innerTexts = await getInnerTexts(page, STATUS_SPANS)
+    return innerTexts.some(t => t === AVAILABLE_STATUS)
   } catch (err) {
     logger.error('CVS checker error:', err)
     return null // status unknown
