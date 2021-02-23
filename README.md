@@ -12,10 +12,11 @@ If you'd like to see what the app is doing, then configure it to show its browse
 In this initial version, the app must run locally.
 
 1. Install Node.js v14
-1. Run `npm i` in a terminal to install dependencies.
-1. Rename the `privateConfig-example.js` file to just "privateConfig.js".
-1. Edit the contents of `privateConfig.js` file with your own personal info.
-1. Run `npm start` in a terminal to start the scanner.
+2. Clone this repo to your computer. Navigate your terminal to your local copy of this repo.
+3. Run `npm i` in a terminal to install dependencies.
+4. Rename the `privateConfig-example.js` file to just "privateConfig.js".
+5. Edit the contents of `privateConfig.js` file with your own location and contact info.
+6. Run `npm start` in a terminal to start scanning.
 
 By default, the program will only show desktop notifications and print helpful logs in the terminal. You can edit the `privateConfig.js` file to also send notifications via a combo of email and SMS.
 
