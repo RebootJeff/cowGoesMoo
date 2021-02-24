@@ -2,7 +2,24 @@ import nodemailer from 'nodemailer'
 
 import getMessageFields from './message.js'
 import validateConfig from './validateConfig.js'
+import { sendBadConfigAlert } from '../desktop.js'
+import logger from '../../utils/logger.js'
 import { SENDER, RECIPIENTS } from '../../../privateConfig.js'
+
+// Used for limiting outgoing emails
+let lastSent = 0 // milliseconds UNIX epoch
+
+/*
+ * Sends notification to an individual.
+ * param {Int} dailyLimit - number of emails that can be sent per day
+ * param {Int} numRecipients - number of recipients (num of emails to be sent at a time)
+ * returns Promise<void> - resolution value is not meant to be used
+*/
+const getNextSendTime = (dailyLimit, numRecipients) => {
+  const TIME_PER_DAY = 24 * 60 * 60 * 1000 // milliseconds
+  const TIME_BETWEEN_SENDS = Math.ceil(TIME_PER_DAY / dailyLimit * numRecipients)
+  return lastSent + TIME_BETWEEN_SENDS
+}
 
 /*
  * Sends notification to an individual.
@@ -14,10 +31,10 @@ import { SENDER, RECIPIENTS } from '../../../privateConfig.js'
 */
 const sendMessage = async (transporter, recipient, pharmacy, url) => {
   if (validateConfig(SENDER, recipient) === false) {
-    return console.log('🙊 Email/SMS notification cannot be sent!')
+    return logger.log('🙊 Email/SMS notification cannot be sent!')
   }
 
-  console.log(`📧 Sending email/SMS to ${recipient.address}...`)
+  logger.log(`📧 Sending email/SMS to ${recipient.address}...`)
 
   await transporter.sendMail({
     from: SENDER.address,
@@ -25,7 +42,9 @@ const sendMessage = async (transporter, recipient, pharmacy, url) => {
     ...(getMessageFields(SENDER, recipient, pharmacy, url))
   })
 
-  console.log(`👍 Email/SMS sent to ${recipient.name}.`)
+  lastSent = Date.now()
+
+  logger.log(`👍 Email/SMS sent to ${recipient.name}.`)
 }
 
 /*
@@ -35,8 +54,28 @@ const sendMessage = async (transporter, recipient, pharmacy, url) => {
  * returns Promise<void> - resolution value is not meant to be used
 */
 const notify = async (pharmacy, url) => {
-  if (Array.isArray(RECIPIENTS) === false) {
-    console.log('🤷‍♂️ There are no recipients configured.')
+  const numRecipients = RECIPIENTS.length
+  if (Array.isArray(RECIPIENTS) === false || numRecipients < 1) {
+    logger.log('🤷‍♂️ There are no recipients configured.')
+    return await sendBadConfigAlert('Add recipients to the config')
+  }
+
+  const { dailyLimit } = SENDER
+  if (dailyLimit < 1) {
+    logger.log('😑 Why does your config have a dailyLimit below 1?')
+    return await sendBadConfigAlert('dailyLimit must be greater than or equal to 1')
+  }
+  if (dailyLimit < numRecipients) {
+    logger.log('😑 Why does your config have a dailyLimit below the number of recipients?')
+    return await sendBadConfigAlert('dailyLimit must be > number of recipients')
+  }
+
+  // Throttle email notification if necessary
+  const nextSendTime = getNextSendTime(dailyLimit, numRecipients)
+  if (nextSendTime > Date.now()) {
+    logger.log(`⏸  Email/SMS notifications disabled until
+      ${new Date(nextSendTime)} to prevent hitting the daily limit.`)
+    return
   }
 
   const transporter = nodemailer.createTransport({
@@ -51,7 +90,7 @@ const notify = async (pharmacy, url) => {
     try {
       await sendMessage(transporter, recipient, pharmacy, url)
     } catch (err) {
-      console.error(`💥 Failed to send email/SMS about ${pharmacy} to ${recipient}:`, err)
+      logger.error(`💥 Failed to send email/SMS about ${pharmacy} to ${recipient}:`, err)
     }
   }
 }
