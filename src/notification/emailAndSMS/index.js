@@ -17,8 +17,8 @@ let lastSent = 0 // milliseconds UNIX epoch
 */
 const getNextSendTime = (dailyLimit, numRecipients) => {
   const TIME_PER_DAY = 24 * 60 * 60 * 1000 // milliseconds
-  const TIME_BETWEEN_SENDS = Math.ceil(TIME_PER_DAY / dailyLimit * numRecipients)
-  return lastSent + TIME_BETWEEN_SENDS
+  const timeBetweenSends = Math.ceil(TIME_PER_DAY / dailyLimit * numRecipients)
+  return lastSent + timeBetweenSends
 }
 
 /*
@@ -31,7 +31,8 @@ const getNextSendTime = (dailyLimit, numRecipients) => {
 */
 const sendMessage = async (transporter, recipient, pharmacy, url) => {
   if (validateConfig(SENDER, recipient) === false) {
-    return logger.log('🙊 Email/SMS notification cannot be sent!')
+    logger.log('🛑 Cannot send email/SMS: Sender or recipient info is improperly configured.')
+    return await sendBadConfigAlert('Check your sender/recipient config.')
   }
 
   logger.log(`📧 Sending email/SMS to ${recipient.address}...`)
@@ -56,26 +57,24 @@ const sendMessage = async (transporter, recipient, pharmacy, url) => {
 const notify = async (pharmacy, url) => {
   const numRecipients = RECIPIENTS.length
   if (Array.isArray(RECIPIENTS) === false || numRecipients < 1) {
-    logger.log('🤷‍♂️ There are no recipients configured.')
-    return await sendBadConfigAlert('Add recipients to the config')
+    logger.log('🛑 Cannot send email/SMS: There are no recipients configured. 😑')
+    return await sendBadConfigAlert('Add recipients to the config.')
   }
 
   const { dailyLimit } = SENDER
-  if (dailyLimit < 1) {
-    logger.log('😑 Why does your config have a dailyLimit below 1?')
-    return await sendBadConfigAlert('dailyLimit must be greater than or equal to 1')
-  }
-  if (dailyLimit < numRecipients) {
-    logger.log('😑 Why does your config have a dailyLimit below the number of recipients?')
-    return await sendBadConfigAlert('dailyLimit must be > number of recipients')
-  }
+  if (dailyLimit > 0) {
+    if (dailyLimit < numRecipients) {
+      logger.log('🛑 Cannot send email/SMS: Why does your config have a dailyLimit below the number of recipients? 😑')
+      return await sendBadConfigAlert('dailyLimit must be > number of recipients.')
+    }
 
-  // Throttle email notification if necessary
-  const nextSendTime = getNextSendTime(dailyLimit, numRecipients)
-  if (nextSendTime > Date.now()) {
-    logger.log(`⏸  Email/SMS notifications disabled until
-      ${new Date(nextSendTime)} to prevent hitting the daily limit.`)
-    return
+    // Throttle email notification if necessary
+    const nextSendTime = getNextSendTime(dailyLimit, numRecipients)
+    if (nextSendTime > Date.now()) {
+      logger.log(`⏸  Email/SMS notifications disabled until
+        ${new Date(nextSendTime)} to prevent hitting the daily limit.`)
+      return
+    }
   }
 
   const transporter = nodemailer.createTransport({
