@@ -6,11 +6,15 @@ export const ENABLE_NOTIFICATION = Object.freeze({
 
 export const SENDER = Object.freeze({
   address: 'you@gmail.com',
-  dailyLimit: 50, // most free services have a limit to prevent you from spamming others
-  name: 'Your Full Name', // use your full name if you want your recipient to recognize you
+
+  // Most free services have a limit to prevent you from spamming others
+  dailyLimit: 0, // Use 0 to remove any limitations
+
+  name: 'Your name here', // Use your full name if you want your recipient to recognize you
   password: 'bestPasswordEverObviously',
-  service: 'Gmail', // Supported services: https://github.com/nodemailer/nodemailer/blob/master/lib/well-known/services.json
-  // If you want to use Gmail, you may need to change some Gmail Account settings: https://nodemailer.com/usage/using-gmail/
+  
+  // Supported services: https://github.com/nodemailer/nodemailer/blob/master/lib/well-known/services.json
+  service: 'Gmail', // If you want to use Gmail, you may need to change some Gmail Account settings: https://nodemailer.com/usage/using-gmail/
 })
 
 export const RECIPIENTS = Object.freeze([
