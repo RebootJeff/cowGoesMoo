@@ -1,5 +1,6 @@
 import notify from './notification/index.js'
 import sites from './sites/index.js'
+import wait from './utils/wait.js'
 import {
   LOOP_INTERVAL, SEARCH,
 } from '../privateConfig.js'
@@ -57,7 +58,7 @@ const startChecking = async (browser) => {
     
     const pauseDuration = Math.round(INTERVAL_MS / sites.length)
     console.log(`⏳ Sites will be checked again in ~${Math.round(pauseDuration / 1000)} seconds.`)
-    await page.waitForTimeout(pauseDuration)
+    await wait(pauseDuration)
   }
 }
 
