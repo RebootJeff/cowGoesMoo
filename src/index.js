@@ -6,17 +6,8 @@ import {
   HIDE_BROWSER, BROWSER_SIZE,
 } from '../privateConfig.js'
 
-let browser
-
-// TODO: On Windows, there is a long pause between the browser closing and "Closing browser..."
-// getting logged. Somehow CTRL+C stops Puppeteer browser before this function runs.
-// And why is there such a long pause?
+// TODO: On Windows, there is a long pause between the browser closing and exiting the process.
 const shutDown = async (code = 0) => {
-  if (browser) {
-    logger.log('🏁 Closing browser...')
-    await browser.close() // TODO: Node doesn't seem to wait for this.
-    console.log('why doesn\'t this show up?')
-  }
   process.exit(code)
 }
 
@@ -33,14 +24,14 @@ process.on('exit', () => {
 const start = async () => {
   logger.log('🚦 Launching browser...')
   const { height, width } = BROWSER_SIZE
-  browser = await puppeteer.launch({
+  const browser = await puppeteer.launch({
     headless: HIDE_BROWSER,
     defaultViewport: { width, height },
     args: [`--window-size=${width},${height}`]
   })
 
   try {
-    startChecking(browser)
+    await startChecking(browser)
   } catch (err) {
     logger.error('💥 App failure:', err)
     await shutDown(1)

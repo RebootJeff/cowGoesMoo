@@ -52,7 +52,7 @@ const startChecking = async (browser) => {
   const page = await browser.newPage()
 
   while (true) {
-    console.log('ℹ You can exit by hitting CTRL+C ...but it may take a minute to fully exit.')
+    console.log('ℹ You can exit by hitting CTRL+C ...but it may take ~10sec to fully exit.')
 
     await checkAllSites(page)
     
