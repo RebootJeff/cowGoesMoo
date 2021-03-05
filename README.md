@@ -21,4 +21,4 @@ By default, the program will only show desktop notifications and print helpful l
 
 ## More Info
 
-Visit [the wiki](https://github.com/RebootJeff/cowGoesMoo/wiki) for more background info, docs, etc!
+Visit [the wiki](https://github.com/RebootJeff/cowGoesMoo/wiki) for more background info, docs, 🚨 *__important caveats__* 🚨, etc!
