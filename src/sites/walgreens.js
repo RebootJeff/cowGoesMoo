@@ -1,7 +1,8 @@
 import { hasInnertText } from '../utils/page.js'
 
 const NAME = 'Walgreens'
-const URL = 'https://www.walgreens.com/findcare/vaccination/covid-19/location-screening'
+const URL = 'https://www.walgreens.com'
+const SEARCH_URL = 'https://www.walgreens.com/findcare/vaccination/covid-19/location-screening'
 
 const HAPPY_TEXT = 'Appointments available!'
 const SAD_TEXT = 'Appointments unavailable'
@@ -45,7 +46,10 @@ const checkBanners = async (page) => {
  * returns Promise<boolean> - appointment availability
 */
 const checker = async (page, { zipCode }) => {
+  // Walgreens blocks you from directly visiting SEARCH_URL. They're probably checking for
+  // a cookie (such as session ID), so we visit the main site first to get the cookie.
   await page.goto(URL)
+  await page.goto(SEARCH_URL)
   const zipCodeInputField = await page.$(ZIP_CODE_INPUT_FIELD)
 
   // Clear the pre-populated input by deleting 6 characters
