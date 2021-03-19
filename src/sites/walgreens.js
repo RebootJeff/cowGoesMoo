@@ -55,7 +55,7 @@ const checker = async (page, { zipCode }) => {
   // Clear the pre-populated input by deleting 6 characters
   // NOTE: Pre-populated zip code should only be 5 digits,
   // but it doesn't always work if I only delete 5 times.
-  for (const _ of [1, 2, 3, 4, 5, 6]) {
+  for (const _ of [1, 2, 3, 4, 5, 6]) { // eslint-disable-line no-unused-vars
     await zipCodeInputField.press('Backspace')
     await page.waitForTimeout(250)
   }

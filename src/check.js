@@ -51,7 +51,7 @@ const checkAllSites = async (page) => {
 const startChecking = async (browser) => {
   const page = await browser.newPage()
 
-  while (true) {
+  while (true) { // eslint-disable-line no-constant-condition
     console.log('ℹ You can exit by hitting CTRL+C ...but it may take ~10sec to fully exit.')
 
     await checkAllSites(page)
