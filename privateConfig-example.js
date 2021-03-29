@@ -31,8 +31,10 @@ export const RECIPIENTS = Object.freeze([
 ])
 
 export const SEARCH = Object.freeze({
-  state: 'CA',
-  zipCode: '90210',
+  cities: [ // used for CVS (make sure each city has a CVS location)
+    'San Francisco, CA',
+  ],
+  zipCode: '94102', // used for Walgreens (they use 25-mile radius)
 })
 
 export const LOOP_INTERVAL = 5 // minutes
