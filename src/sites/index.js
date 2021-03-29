@@ -4,7 +4,7 @@ import walgreens from './walgreens.js'
 
 const siteCheckers = [
   // debugSite,
-  // cvs,
+  cvs,
   walgreens,
 ]
 
