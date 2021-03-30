@@ -1,5 +1,6 @@
 import notify from './notification/index.js'
 import sites from './sites/index.js'
+import logger from './utils/logger.js'
 import wait from './utils/wait.js'
 import {
   LOOP_INTERVAL, SEARCH,
@@ -18,7 +19,7 @@ const runCheckerSafely = async (name, checker, page, searchConfig) => {
   try {
     return await checker(page, searchConfig)
   } catch (err) {
-    console.error(`💥 ${name} checker error:`, err)
+    logger.error(`💥 ${name} checker error:`, err)
     return null
   }
 }
@@ -30,15 +31,15 @@ const runCheckerSafely = async (name, checker, page, searchConfig) => {
 */
 const checkAllSites = async (page) => {  
   for (const {name, checker, url} of sites) {
-    console.log(`🔍 Checking ${name}\n   at ${new Date()}...`)
+    logger.log(`🔍 Checking ${name}\n   at ${new Date()}...`)
     const result = await runCheckerSafely(name, checker, page, SEARCH)
 
     if (result === true) {
       notify(name, url) // we're not going to `await`, we're going to multi-task
     } else if (result === false) {
-      console.log(`⛔ ${name} has no appointments open yet.`)
+      logger.log(`⛔ ${name} has no appointments open yet.`)
     } else {
-      console.log(`❓ ${name} appointment availability is unknown 🤔.`)
+      logger.log(`❓ ${name} appointment availability is unknown 🤔.`)
     }
   }
 }
@@ -52,12 +53,12 @@ const startChecking = async (browser) => {
   const page = await browser.newPage()
 
   while (true) { // eslint-disable-line no-constant-condition
-    console.log('ℹ You can exit by hitting CTRL+C ...but it may take ~10sec to fully exit.')
+    logger.log('ℹ You can exit by hitting CTRL+C ...but it may take ~10sec to fully exit.')
 
     await checkAllSites(page)
     
     const pauseDuration = Math.round(INTERVAL_MS / sites.length)
-    console.log(`⏳ Sites will be checked again in ~${Math.round(pauseDuration / 1000)} seconds.`)
+    logger.log(`⏳ Sites will be checked again in ~${Math.round(pauseDuration / 1000)} seconds.`)
     await wait(pauseDuration)
   }
 }

@@ -1,3 +1,5 @@
+import logger from '../../utils/logger.js'
+
 /*
  * Checks that the config file contains all the necessary email fields.
  * param {Object} sender
@@ -13,7 +15,7 @@ export default (sender, recipient) => {
       recipient.address &&
       recipient.name
   } catch (err) {
-    console.error('💥 privateConfig.js is missing sender or recipient info:', err)
+    logger.error('💥 privateConfig.js is missing sender or recipient info:', err)
     return false
   }
 }

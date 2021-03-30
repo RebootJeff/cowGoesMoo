@@ -56,7 +56,12 @@ const checker = async (page, { cities }) => {
 
     // TODO: Rather than just returning a Boolean, return the list of cities
     // for better info in the notifications.
-    return citiesWithAppointments.length > 0
+    if (citiesWithAppointments.length > 0) {
+      logger.log(`🏙 Matching cities with CVS appointments: ${citiesWithAppointments}`)
+      return true
+    } else {
+      return false
+    }
   } catch (err) {
     logger.error('CVS checker error:', err)
     return null // status unknown
