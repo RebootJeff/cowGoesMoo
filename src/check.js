@@ -37,9 +37,13 @@ const checkAllSites = async (page) => {
     logger.log(`🔍 Checking ${name}\n   at ${new Date()}...`)
     const result = await runCheckerSafely(name, checker, page, SEARCH)
 
-    if (result === true && !sitesWithAppointments.has(name)) {
-      sitesWithAppointments.add(name)
-      notify(name, url) // we're not going to `await`, we're going to multi-task
+    if (result === true) {
+      if (sitesWithAppointments.has(name)) {
+        logger.log(`🤐 ${name} still has open appointments; notifications were already sent.`)
+      } else {
+        sitesWithAppointments.add(name)
+        notify(name, url) // we're not going to `await`, we're going to multi-task
+      }
     } else if (result === false) {
       sitesWithAppointments.delete(name)
       logger.log(`⛔ ${name} has no appointments open yet.`)
