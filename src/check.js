@@ -22,7 +22,7 @@ const runCheckerSafely = async (name, checker, page, searchConfig) => {
   try {
     return await checker(page, searchConfig)
   } catch (err) {
-    logger.error(`💥 ${name} checker error:`, err)
+    logger.error(`${name} checker error:`, err)
     return null
   }
 }

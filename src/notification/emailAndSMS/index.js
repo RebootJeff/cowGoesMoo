@@ -89,7 +89,7 @@ const notify = async (pharmacy, url) => {
     try {
       await sendMessage(transporter, recipient, pharmacy, url)
     } catch (err) {
-      logger.error(`💥 Failed to send email/SMS about ${pharmacy} to ${recipient}:`, err)
+      logger.error(`Failed to send email/SMS about ${pharmacy} to ${recipient}:`, err)
     }
   }
 }

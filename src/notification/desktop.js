@@ -48,7 +48,7 @@ const sendDesktopAlert = async (pharmacy, url) => {
       wait: true,
     })
   } catch (err) {
-    logger.error(`💥 Error sending desktop alert for ${pharmacy}:`, err)
+    logger.error(`Error sending desktop alert for ${pharmacy}:`, err)
   }
 }
 
