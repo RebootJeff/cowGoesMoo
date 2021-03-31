@@ -8,6 +8,9 @@ import {
 
 const INTERVAL_MS = LOOP_INTERVAL * 60 * 1000 // milliseconds
 
+// Keep track of sites to avoid redundant notifications
+const sitesWithAppointments = new Set()
+
 /*
  * param {String} name
  * param {function} checker
@@ -34,9 +37,11 @@ const checkAllSites = async (page) => {
     logger.log(`🔍 Checking ${name}\n   at ${new Date()}...`)
     const result = await runCheckerSafely(name, checker, page, SEARCH)
 
-    if (result === true) {
+    if (result === true && !sitesWithAppointments.has(name)) {
+      sitesWithAppointments.add(name)
       notify(name, url) // we're not going to `await`, we're going to multi-task
     } else if (result === false) {
+      sitesWithAppointments.delete(name)
       logger.log(`⛔ ${name} has no appointments open yet.`)
     } else {
       logger.log(`❓ ${name} appointment availability is unknown 🤔.`)
