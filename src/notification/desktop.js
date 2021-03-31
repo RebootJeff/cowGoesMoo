@@ -4,6 +4,8 @@ import logger from '../utils/logger.js'
 
 // Promisified wrapper for node-notifier
 const notifyDesktop = input => new Promise((resolve, reject) => {
+  logger.log('🚩 Sending desktop notification.')
+
   notifier.notify(input, (err, response, metadata) => {
     if (err) {
       reject(err)
