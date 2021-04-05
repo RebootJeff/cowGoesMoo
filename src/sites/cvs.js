@@ -44,26 +44,26 @@ const checkByLocation = async (page, state, city) => {
 */
 const checker = async (page, { cities }) => {
   try {
-    const citiesWithAppointments = []
+    const locationsWithAppointments = []
 
     for (let location of cities) {
       const [ city, state ] = location.split(', ')
       const result = await checkByLocation(page, state, city)
       if (result === true) {
-        citiesWithAppointments.push(location)
+        locationsWithAppointments.push(location)
       }
     }
 
-    // TODO: Rather than just returning a Boolean, return the list of cities
+    // TODO: Rather than just returning a Boolean, return the list of locations
     // for better info in the notifications.
-    if (citiesWithAppointments.length > 0) {
-      logger.log(`🏙 Matching cities with CVS appointments: ${citiesWithAppointments}`)
+    if (locationsWithAppointments.length > 0) {
+      logger.log(`🏙 Matching cities w/${NAME} appointments: ${locationsWithAppointments}`)
       return true
     } else {
       return false
     }
   } catch (err) {
-    logger.error('CVS checker error:', err)
+    logger.error(`${NAME} checker error:`, err)
     return null // status unknown
   }
   

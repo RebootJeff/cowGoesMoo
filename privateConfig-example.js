@@ -34,7 +34,9 @@ export const SEARCH = Object.freeze({
   cities: [ // used for Vaccine Spotter and CVS (make sure each city has a CVS location)
     'San Francisco, CA',
   ],
-  zipCode: '94102', // used for Walgreens (they use 25-mile radius)
+  zipCodes: [ // used for Walgreens (they use 25-mile radius)
+    '94102',
+  ],
 })
 
 export const LOOP_INTERVAL = 5 // minutes
