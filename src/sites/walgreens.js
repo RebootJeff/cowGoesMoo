@@ -89,7 +89,9 @@ const checker = async (page, { zipCodes }) => {
   // TODO: Rather than just returning a Boolean, return the list of locations
   // for better info in the notifications.
   if (locationsWithAppointments.length > 0) {
-    logger.log(`🏙 Matching cities w/${NAME} appointments: ${locationsWithAppointments}`)
+    logger.log(
+      `🏙 Matching zip codes w/${NAME} appointments: ${locationsWithAppointments.join('; ')}`
+    )
     return true
   } else {
     return false

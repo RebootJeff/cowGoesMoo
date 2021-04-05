@@ -38,21 +38,21 @@ const checkByLocation = async (state, city) => {
 */
 const checker = async (_, { cities }) => {
   try {
-    const citiesWithAppointments = []
+    const locationsWithAppointments = []
 
     for (let location of cities) {
       const [ city, state ] = location.split(', ')
       const result = await checkByLocation(state, city)
       if (result === true) {
-        citiesWithAppointments.push(location)
+        locationsWithAppointments.push(location)
       }
     }
 
-    // TODO: Rather than just returning a Boolean, return the list of cities
+    // TODO: Rather than just returning a Boolean, return the list of locations
     // for better info in the notifications.
-    if (citiesWithAppointments.length > 0) {
+    if (locationsWithAppointments.length > 0) {
       logger.log(
-        `🏙 Matching cities w/appointments on ${NAME}: ${citiesWithAppointments.join('; ')}`
+        `🏙 Matching cities w/appointments on ${NAME}: ${locationsWithAppointments.join('; ')}`
       )
       return true
     } else {
